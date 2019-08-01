@@ -3,6 +3,7 @@
     Breaking changes from 0.4 to 0.5 can be found here: 
     https://solidity.readthedocs.io/en/v0.5.0/050-breaking-changes.html
 */
+
 pragma solidity ^0.5.0;
 
 contract SupplyChain {
@@ -48,9 +49,9 @@ contract SupplyChain {
     Each event should accept one argument, the sku */
 
   event LogForSale(uint sku);
-  event LogForSold(uint sku);
-  event LogForShipped(uint sku);
-  event LogForReceived(uint sku);
+  event LogSold(uint sku);
+  event LogShipped(uint sku);
+  event LogReceived(uint sku);
 
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
 
@@ -120,7 +121,7 @@ contract SupplyChain {
     items[sku].seller.transfer(items[sku].price);
 	  items[sku].state = State.Sold;
   	items[sku].buyer = msg.sender;
-  	emit LogForSold(sku);
+  	emit LogSold(sku);
   }
 
   /* Add 2 modifiers to check if the item is sold already, and that the person calling this function
@@ -129,7 +130,7 @@ contract SupplyChain {
     public sold(sku) verifyCaller(items[sku].seller)
   {
     items[sku].state = State.Shipped;
-    emit LogForShipped(sku);
+    emit LogShipped(sku);
   }
 
   /* Add 2 modifiers to check if the item is shipped already, and that the person calling this function
@@ -138,7 +139,7 @@ contract SupplyChain {
     public shipped(sku) verifyCaller(items[sku].buyer)
   {
     items[sku].state = State.Received;
-    emit LogForReceived(sku);
+    emit LogReceived(sku);
   }
 
   /* We have these functions completed so we can run tests, just ignore it :) */
